@@ -108,6 +108,15 @@ def analisar_dados():
     for categoria, valor in gastos_categoria.items():
         print(f"- {categoria}: R$ {valor:.2f}")
     
+def padronizar_categorias():
+    dados = carregar_dados()
+
+    for t in dados:
+        t["categoria"] = t["categoria"].strip().title()
+
+    salvar_dados(dados)
+    print("Categorias padronizadas com sucesso!")
+    
 def menu():
     while True:
         print("\n===== CONTROLE FINANCEIRO =====")
@@ -116,7 +125,8 @@ def menu():
         print("3 - Ver saldo")
         print("4 - Exportar para Excel")
         print("5 - Analisar dados")
-        print("6 - Sair")
+        print("6 - Padronizar Categorias")
+        print("7 - Sair")
         
         opcao = input("Escolha: ")
         
@@ -131,6 +141,8 @@ def menu():
         elif opcao == "5":
             analisar_dados()
         elif opcao == "6":
+            padronizar_categorias()
+        elif opcao == "7":
             print("Saindo...")
             break
         else:

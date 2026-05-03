@@ -2,13 +2,13 @@
     {
         "tipo": "receita",
         "valor": 1000,
-        "categoria": "salário",
+        "categoria": "Salário",
         "data": "2026-05-03"
     },
     {
         "tipo": "receita",
         "valor": 2000.0,
-        "categoria": "salário",
+        "categoria": "Salário",
         "data": "2026-04-30"
     },
     {
@@ -20,13 +20,13 @@
     {
         "tipo": "receita",
         "valor": 130.0,
-        "categoria": "PF ",
+        "categoria": "Pf",
         "data": "2026-05-03"
     },
     {
         "tipo": "despesa",
         "valor": 200.0,
-        "categoria": "reserva salário",
+        "categoria": "Reserva Salário",
         "data": "2026-04-30"
     }
 ]
