@@ -85,6 +85,28 @@ def exportar_excel():
     
     print("Arquivo Excel gerado com sucesso!")
     
+def analisar_dados():
+    dados = carregar_dados()
+    
+    if not dados:
+        print("Sem dados para análise.")
+        return
+    
+    df = pd.DataFrame(dados)
+    
+    receitas = df[df["tipo"] == "receita"]["valor"].sum()
+    despesas = df[df["tipo"] == "despesa"]["valor"].sum()
+    saldo = receitas - despesas
+    
+    print("\n--- ANÁLISE FINANCEIRA ---")
+    print(f"Total de receitas: R$ {receitas:.2f}")
+    print(f"Total de despesas: R$ {despesas:.2f}")
+    print(f"Saldo final: R$ {saldo:.2f}")
+    
+    print("\nGastos por categoria:")
+    gastos_categoria = df[df["tipo"] == "despesa"].groupby("categoria")["valor"].sum()
+    print(gastos_categoria)
+    
 def menu():
     while True:
         print("\n===== CONTROLE FINANCEIRO =====")
@@ -92,7 +114,8 @@ def menu():
         print("2 - Listar transações")
         print("3 - Ver saldo")
         print("4 - Exportar para Excel")
-        print("5 - Sair")
+        print("5 - Analisar dados")
+        print("6 - Sair")
         
         opcao = input("Escolha: ")
         
@@ -105,6 +128,8 @@ def menu():
         elif opcao == "4":
             exportar_excel()
         elif opcao == "5":
+            analisar_dados()
+        elif opcao == "6":
             print("Saindo...")
             break
         else:
