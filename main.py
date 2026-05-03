@@ -29,7 +29,7 @@ def adicionar_transacao():
         except ValueError:
             print("Valor inválido! Digite um número.")
             
-    categoria = input("Categoria: ")
+    categoria = input("Categoria: ").strip().title()
     data = input("Data (YYYY-MM-DD): ")
     
     dados = carregar_dados()
