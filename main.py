@@ -1,6 +1,8 @@
 import json
+import pandas as pd
 
 ARQUIVO = "dados.json"
+
 
 def carregar_dados():
     try:
@@ -71,13 +73,26 @@ def ver_saldo():
             
     print(f"Saldo atual: {saldo:.2f}")
     
+def exportar_excel():
+    dados = carregar_dados()
+    
+    if not dados:
+        print("Sem dados para exportar.")
+        return
+    
+    df = pd.DataFrame(dados)
+    df.to_excel("transacoes.xlsx", index=False)
+    
+    print("Arquivo Excel gerado com sucesso!")
+    
 def menu():
     while True:
         print("\n===== CONTROLE FINANCEIRO =====")
         print("1 - Adicionar transação")
         print("2 - Listar transações")
         print("3 - Ver saldo")
-        print("4 - Sair")
+        print("4 - Exportar para Excel")
+        print("5 - Sair")
         
         opcao = input("Escolha: ")
         
@@ -88,6 +103,8 @@ def menu():
         elif opcao == "3":
             ver_saldo()
         elif opcao == "4":
+            exportar_excel()
+        elif opcao == "5":
             print("Saindo...")
             break
         else:
