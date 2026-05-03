@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 ARQUIVO = "dados.json"
 
@@ -127,7 +127,7 @@ def grafico_gastos_categoria():
     gastos_categoria = despesas.groupby("categoria")["valor"].sum()
     
     plt.figure()
-    plt.pie(gastos_categoria, labels=gastos_categoria.index, autopct='%1.1%%')
+    plt.pie(gastos_categoria, labels=gastos_categoria.index, autopct='%1.1f%%')
     plt.title("Gastos por Categoria")
     
     plt.show()
