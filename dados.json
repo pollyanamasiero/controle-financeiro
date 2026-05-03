@@ -10,5 +10,11 @@
         "valor": 2000.0,
         "categoria": "sal\u00e1rio",
         "data": "2026-04-30"
+    },
+    {
+        "tipo": "despesa",
+        "valor": 90.72,
+        "categoria": "Seguro",
+        "data": "2026-05-10"
     }
 ]

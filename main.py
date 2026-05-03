@@ -14,8 +14,19 @@ def salvar_dados(dados):
         json.dump(dados, f, indent=4)
         
 def adicionar_transacao():
-    tipo = input("Digite o tipo (receita/despesa): ")
-    valor = float(input("Digite o valor: "))
+    tipo = input("Digite o tipo (receita/despesa): ").lower()
+    
+    while tipo not in ["receita", "despesa"]:
+        print("Tipo inválido!")
+        tipo = input("Digite o tipo (receita/despesa): ").lower()
+        
+    while True:
+        try:
+            valor = float(input("Digite o valor: "))
+            break
+        except ValueError:
+            print("Valor inválido! Digite um número.")
+            
     categoria = input("Categoria: ")
     data = input("Data (YYYY-MM-DD): ")
     
