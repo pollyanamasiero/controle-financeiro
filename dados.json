@@ -1,0 +1,14 @@
+[
+    {
+        "tipo": "receita",
+        "valor": 1000,
+        "categoria": "sal\u00c3\u00a1rio",
+        "data": "2026-05-03"
+    },
+    {
+        "tipo": "receita",
+        "valor": 2000.0,
+        "categoria": "sal\u00e1rio",
+        "data": "2026-04-30"
+    }
+]
