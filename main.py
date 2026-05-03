@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import matplotlib as plt
 
 ARQUIVO = "dados.json"
 
@@ -107,6 +108,50 @@ def analisar_dados():
     gastos_categoria = df[df["tipo"] == "despesa"].groupby("categoria")["valor"].sum()
     for categoria, valor in gastos_categoria.items():
         print(f"- {categoria}: R$ {valor:.2f}")
+        
+def grafico_gastos_categoria():
+    dados = carregar_dados()
+    
+    if not dados:
+        print("Sem dados para gerar gráfico.")
+        return
+    
+    df = pd.DataFrame(dados)
+    
+    despesas = df[df["tipo"] == "despesa"]
+    
+    if despesas.empty:
+        print("Sem despesas para analisar.")
+        return
+    
+    gastos_categoria = despesas.groupby("categoria")["valor"].sum()
+    
+    plt.figure()
+    plt.pie(gastos_categoria, labels=gastos_categoria.index, autopct='%1.1%%')
+    plt.title("Gastos por Categoria")
+    
+    plt.show()
+    
+def grafico_receitas_despesas():
+    dados = carregar_dados()
+    
+    if not dados:
+        print("Sem dados para gerar gráfico.")
+        return
+    
+    df = pd.DataFrame(dados)
+    
+    receitas = df[df["tipo"] == "receitas"]["valor"].sum()
+    despesas = df[df["tipo"] == "despesas"]["valor"].sum()
+    
+    categorias = ["Receitas", "Despesas"]
+    valores = [receitas, despesas]
+    
+    plt.figure()
+    plt.bar(categorias, valores)
+    plt.title("Receitas vs Despesas")
+    
+    plt.show()
     
     
 def menu():
@@ -117,7 +162,9 @@ def menu():
         print("3 - Ver saldo")
         print("4 - Exportar para Excel")
         print("5 - Analisar dados")
-        print("6 - Sair")
+        print("6 - Gráfico de gastos por categoria")
+        print("7 - Gráfico receitas vs despesas")
+        print("8 - Sair")
         
         opcao = input("Escolha: ")
         
@@ -132,6 +179,10 @@ def menu():
         elif opcao == "5":
             analisar_dados()
         elif opcao == "6":
+            grafico_gastos_categoria()
+        elif opcao == "7":
+            grafico_receitas_despesas()
+        elif opcao == "8":
             print("Saindo...")
             break
         else:
