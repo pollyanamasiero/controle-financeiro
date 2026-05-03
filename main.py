@@ -44,8 +44,20 @@ def adicionar_transacao():
     
 def listar_transacoes():
     dados = carregar_dados()
-    for t in dados:
-        print(t)
+    
+    if not dados:
+        print("Nenhuma transação encontrada.")
+        return
+    
+    print("\n--- TRANSAÇÕES ---")
+    
+    for i, t in enumerate(dados, start=1):
+        tipo = t["tipo"].capitalize()
+        valor = f"R$ {t['valor']:.2f}"
+        categoria = t["categoria"]
+        data = t["data"]
+        
+        print(f"{i}. [{tipo}] {valor} | {categoria} | {data}")
         
 def ver_saldo():
     dados = carregar_dados()
@@ -57,12 +69,13 @@ def ver_saldo():
         else:
             saldo -= t["valor"]
             
-    print(f"Saldo atual: {saldo}")
+    print(f"Saldo atual: {saldo:.2f}")
     
 def menu():
     while True:
-        print("\n1 - Adicionar")
-        print("2 - Listar")
+        print("\n===== CONTROLE FINANCEIRO =====")
+        print("1 - Adicionar transação")
+        print("2 - Listar transações")
         print("3 - Ver saldo")
         print("4 - Sair")
         
@@ -75,5 +88,8 @@ def menu():
         elif opcao == "3":
             ver_saldo()
         elif opcao == "4":
+            print("Saindo...")
             break
+        else:
+            print("Opção inválida!")
 menu()
