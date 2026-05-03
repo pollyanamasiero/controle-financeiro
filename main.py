@@ -4,14 +4,14 @@ ARQUIVO = "dados.json"
 
 def carregar_dados():
     try:
-        with open(ARQUIVO, "r") as f:
+        with open(ARQUIVO, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
         return []
     
 def salvar_dados(dados):
-    with open(ARQUIVO, "w") as f:
-        json.dump(dados, f, indent=4)
+    with open(ARQUIVO, "w", encoding="utf-8") as f:
+        json.dump(dados, f, indent=4, ensure_ascii=False)
         
 def adicionar_transacao():
     tipo = input("Digite o tipo (receita/despesa): ").lower()
