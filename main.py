@@ -105,7 +105,8 @@ def analisar_dados():
     
     print("\nGastos por categoria:")
     gastos_categoria = df[df["tipo"] == "despesa"].groupby("categoria")["valor"].sum()
-    print(gastos_categoria)
+    for categoria, valor in gastos_categoria.items():
+        print(f"- {categoria}: R$ {valor:.2f}")
     
 def menu():
     while True:
