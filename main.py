@@ -141,8 +141,14 @@ def grafico_receitas_despesas():
     
     df = pd.DataFrame(dados)
     
-    receitas = df[df["tipo"] == "receitas"]["valor"].sum()
-    despesas = df[df["tipo"] == "despesas"]["valor"].sum()
+    df["tipo"] = df["tipo"].str.strip().str.lower()
+    df["valor"] = pd.to_numeric(df["valor"])
+    
+    receitas = df[df["tipo"] == "receita"]["valor"].sum()
+    despesas = df[df["tipo"] == "despesa"]["valor"].sum()
+    
+    print("Receitas:", receitas)
+    print("Despesas:", despesas)
     
     categorias = ["Receitas", "Despesas"]
     valores = [receitas, despesas]
