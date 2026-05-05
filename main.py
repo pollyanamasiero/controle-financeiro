@@ -117,6 +117,7 @@ def grafico_gastos_categoria():
         return
     
     df = pd.DataFrame(dados)
+    df["tipo"] = df["tipo"].str.strip().str.lower()
     
     despesas = df[df["tipo"] == "despesa"]
     
@@ -129,6 +130,9 @@ def grafico_gastos_categoria():
     plt.figure()
     plt.pie(gastos_categoria, labels=gastos_categoria.index, autopct='%1.1f%%')
     plt.title("Gastos por Categoria")
+    
+    plt.savefig("grafico_gastos_categoria.png")
+    print("Gráfico salvo como grafico_gastos_categoria.png")
     
     plt.show()
     
@@ -147,15 +151,15 @@ def grafico_receitas_despesas():
     receitas = df[df["tipo"] == "receita"]["valor"].sum()
     despesas = df[df["tipo"] == "despesa"]["valor"].sum()
     
-    print("Receitas:", receitas)
-    print("Despesas:", despesas)
-    
     categorias = ["Receitas", "Despesas"]
     valores = [receitas, despesas]
     
     plt.figure()
     plt.bar(categorias, valores)
     plt.title("Receitas vs Despesas")
+    
+    plt.savefig("grafico_receitas_despesas.png")
+    print("Gráfico salvo como grafico_receitas_despesas.png")
     
     plt.show()
     
