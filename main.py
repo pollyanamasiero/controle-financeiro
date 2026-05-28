@@ -163,6 +163,34 @@ def grafico_receitas_despesas():
     
     plt.show()
     
+def remover_transacao():
+    dados = carregar_dados()
+    
+    if not dados:
+        print("Nenhuma transação encontrada.") 
+        return
+    
+    print("\n--- TRANSAÇÕES ---")
+    
+    for i, t in enumerate(dados, start=1):
+        print(f"{i}. [{t['tipo'].capitalize()}] R$ {t['valor']:.2f} | {t['categoria']} | {t['data']}")
+        
+    try:
+        indice = int(input("\nDigite o número da transação que deseja remover: "))    
+        
+        if 1 <= indice <= len(dados):
+            removida = dados.pop(indice - 1)
+            salvar_dados(dados)
+            
+            print("\nTransação removida com sucesso!")
+            print(f"Removido: {removida['categoria']} - R$ {removida['valor']:.2f}")
+            
+        else:
+            print('Número inválido.')
+            
+    except ValueError:
+        print("Digite um número válido.")
+    
     
 def menu():
     while True:
@@ -174,7 +202,8 @@ def menu():
         print("5 - Analisar dados")
         print("6 - Gráfico de gastos por categoria")
         print("7 - Gráfico receitas vs despesas")
-        print("8 - Sair")
+        print("8 - Remover transação")
+        print("9 - Sair")
         
         opcao = input("Escolha: ")
         
@@ -193,6 +222,8 @@ def menu():
         elif opcao == "7":
             grafico_receitas_despesas()
         elif opcao == "8":
+            remover_transacao()
+        elif opcao == "9":
             print("Saindo...")
             break
         else:
