@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 ARQUIVO = "dados.json"
 
@@ -24,11 +25,13 @@ def adicionar_transacao():
         tipo = input("Digite o tipo (receita/despesa): ").lower()
         
     while True:
+        data = input("Data (YYYY-MM-DD): ")
+        
         try:
-            valor = float(input("Digite o valor: "))
+            datetime.strptime(data, "%Y-%m-%d")
             break
         except ValueError:
-            print("Valor inválido! Digite um número.")
+            print("Data inválida! Use o formato YYYY-MM-DD.")
             
     categoria = input("Categoria: ").strip().title()
     data = input("Data (YYYY-MM-DD): ")
@@ -56,7 +59,7 @@ def listar_transacoes():
     
     for i, t in enumerate(dados, start=1):
         tipo = t["tipo"].capitalize()
-        valor = f"R$ {t['valor']:.2f}"
+        valor = f"R$ {float(t['valor']):.2f}"
         categoria = t["categoria"]
         data = t["data"]
         
@@ -68,9 +71,9 @@ def ver_saldo():
     
     for t in dados:
         if t["tipo"] == "receita":
-            saldo += t["valor"]
+            saldo += float(t["valor"])
         else:
-            saldo -= t["valor"]
+            saldo -= float(t["valor"])
             
     print(f"Saldo atual: {saldo:.2f}")
     
@@ -173,7 +176,7 @@ def remover_transacao():
     print("\n--- TRANSAÇÕES ---")
     
     for i, t in enumerate(dados, start=1):
-        print(f"{i}. [{t['tipo'].capitalize()}] R$ {t['valor']:.2f} | {t['categoria']} | {t['data']}")
+        print(f"{i}. [{t['tipo'].capitalize()}] R$ {float(t['valor']):.2f} | {t['categoria']} | {t['data']}")
         
     try:
         indice = int(input("\nDigite o número da transação que deseja remover: "))    
@@ -183,10 +186,57 @@ def remover_transacao():
             salvar_dados(dados)
             
             print("\nTransação removida com sucesso!")
-            print(f"Removido: {removida['categoria']} - R$ {removida['valor']:.2f}")
+            print(f"Removido: {removida['categoria']} - R$ {float(removida['valor']):.2f}")
             
         else:
             print('Número inválido.')
+            
+    except ValueError:
+        print("Digite um número válido.")
+        
+def editar_transacao():
+    dados = carregar_dados()
+    
+    if not dados:
+        print('Nenhuma transação encontrada')
+        return
+    print('\n--- TRANSAÇÕES ---')
+    
+    for i, t in enumerate(dados, start=1):
+        print(f"{i}. [{t['tipo'].capitalize()}] R$ {float(t['valor']):.2f} | {t['categoria']} | {t['data']}")
+        
+    try:
+        indice = int(input("\nDigite o número da transação que deseja editar: "))
+        
+        if 1 <= indice <= len(dados):
+            
+            transacao = dados[indice - 1]
+            
+            print("\nDeixe vazio para manter o valor atual.")
+            
+            novo_tipo = input(f"Tipo ({transacao['tipo']}): ").lower()
+            novo_valor = input(f"Valor ({transacao['valor']}): ")
+            nova_categoria = input(f"Categoria ({transacao['categoria']}): ").title()
+            nova_data = input(f"Data ({transacao['data']}): ")
+            
+            if novo_tipo:
+                transacao["tipo"] = novo_tipo
+                
+            if novo_valor:
+                transacao["valor"] = float(novo_valor)
+                
+            if nova_categoria:
+                transacao["categoria"] = nova_categoria
+                
+            if nova_data:
+                transacao["data"] = nova_data
+                
+            salvar_dados(dados)
+            
+            print("\nTransação atualizada com sucesso!")
+            
+        else:
+            print("Número inválido.")
             
     except ValueError:
         print("Digite um número válido.")
@@ -203,7 +253,8 @@ def menu():
         print("6 - Gráfico de gastos por categoria")
         print("7 - Gráfico receitas vs despesas")
         print("8 - Remover transação")
-        print("9 - Sair")
+        print("9 - Editar transação")
+        print("10 - Sair")
         
         opcao = input("Escolha: ")
         
@@ -224,6 +275,8 @@ def menu():
         elif opcao == "8":
             remover_transacao()
         elif opcao == "9":
+            editar_transacao()
+        elif opcao == "10":
             print("Saindo...")
             break
         else:

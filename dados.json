@@ -7,7 +7,7 @@
     },
     {
         "tipo": "receita",
-        "valor": 2000.0,
+        "valor": "2200",
         "categoria": "Salário",
         "data": "2026-04-30"
     },
@@ -19,14 +19,8 @@
     },
     {
         "tipo": "receita",
-        "valor": 130.0,
+        "valor": 300.0,
         "categoria": "Pf",
         "data": "2026-05-03"
-    },
-    {
-        "tipo": "despesa",
-        "valor": 200.0,
-        "categoria": "Reserva Salário",
-        "data": "2026-04-30"
     }
 ]
