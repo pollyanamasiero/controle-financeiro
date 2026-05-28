@@ -25,6 +25,13 @@ def adicionar_transacao():
         tipo = input("Digite o tipo (receita/despesa): ").lower()
         
     while True:
+        try:
+            valor = float(input("Digite um valor:"))
+            break
+        except ValueError:
+            print("Valor inválido! Digite um número.")
+        
+    while True:
         data = input("Data (YYYY-MM-DD): ")
         
         try:
@@ -34,7 +41,6 @@ def adicionar_transacao():
             print("Data inválida! Use o formato YYYY-MM-DD.")
             
     categoria = input("Categoria: ").strip().title()
-    data = input("Data (YYYY-MM-DD): ")
     
     dados = carregar_dados()
     

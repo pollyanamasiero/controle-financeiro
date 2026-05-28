@@ -22,5 +22,11 @@
         "valor": 300.0,
         "categoria": "Pf",
         "data": "2026-05-03"
+    },
+    {
+        "tipo": "despesa",
+        "valor": 99.9,
+        "categoria": "Internet",
+        "data": "2026-06-10"
     }
 ]
