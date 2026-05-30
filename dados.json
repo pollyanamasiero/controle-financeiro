@@ -1,32 +1,38 @@
 [
     {
         "tipo": "receita",
-        "valor": 1000,
-        "categoria": "Salário",
-        "data": "2026-05-03"
-    },
-    {
-        "tipo": "receita",
-        "valor": "2200",
+        "valor": 2000,
         "categoria": "Salário",
         "data": "2026-04-30"
     },
     {
         "tipo": "despesa",
-        "valor": 90.72,
+        "valor": 90.76,
         "categoria": "Seguro",
         "data": "2026-05-10"
-    },
-    {
-        "tipo": "receita",
-        "valor": 300.0,
-        "categoria": "Pf",
-        "data": "2026-05-03"
     },
     {
         "tipo": "despesa",
         "valor": 99.9,
         "categoria": "Internet",
+        "data": "2026-06-10"
+    },
+    {
+        "tipo": "despesa",
+        "valor": 500.0,
+        "categoria": "Lazer",
+        "data": "2026-05-30"
+    },
+    {
+        "tipo": "despesa",
+        "valor": 290.26,
+        "categoria": "Parcelamento Cartão",
+        "data": "2026-06-08"
+    },
+    {
+        "tipo": "despesa",
+        "valor": 49.99,
+        "categoria": "Celular",
         "data": "2026-06-10"
     }
 ]
