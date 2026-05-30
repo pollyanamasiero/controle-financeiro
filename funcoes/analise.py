@@ -11,7 +11,7 @@ def analisar_dados():
     df = pd.DataFrame(dados)
     
     df["valor"] = pd.to_numeric(df["valor"])
-    df["topo"] = df["tipo"].str.strip().str.lower()
+    df["tipo"] = df["tipo"].str.strip().str.lower()
     
     receitas = df[df["tipo"] == "receita"]["valor"].sum()
     despesas = df[df["tipo"] == "despesa"]["valor"].sum()

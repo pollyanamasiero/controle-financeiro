@@ -1,3 +1,4 @@
 transacoes.xlsx
 grafico_*.png
 __pycache__/
+.vscode/
