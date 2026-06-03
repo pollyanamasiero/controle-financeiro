@@ -1,7 +1,25 @@
 import json
 from datetime import datetime
+from funcoes.banco import conectar
 
 ARQUIVO = "dados.json"
+
+def teste_banco():
+    conexao = conectar()
+
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        INSERT INTO transacoes
+        (tipo, valor, categoria, data)
+        VALUES (?, ?, ?, ?)
+    """, ("receita", 999.99, "Teste", "2026-06-03"))
+
+    conexao.commit()
+    conexao.close()
+
+    print("Registro inserido!")
+    
 
 def carregar_dados():
     try:
@@ -70,16 +88,29 @@ def adicionar_transacao():
             
     categoria = input("Categoria: ").strip().title()
     
-    dados = carregar_dados()
+    # dados = carregar_dados()
     
-    dados.append({
-        "tipo": tipo,
-        "valor": valor,
-        "categoria": categoria,
-        "data": data
-    })
+    # dados.append({
+    #     "tipo": tipo,
+    #     "valor": valor,
+    #     "categoria": categoria,
+    #     "data": data
+    # })
     
-    salvar_dados(dados)
+    conexao = conectar()
+    
+    cursor = conexao.cursor()
+    
+    cursor.execute("""
+        INSERT INTO transacoes
+        (tipo, valor, categoria, data)
+        VALUES (?, ?, ?, ?)
+    """, (tipo, valor, categoria, data))
+
+    conexao.commit()
+    conexao.close()
+    
+    # salvar_dados(dados)
     print("Transação salva!")
     
     
