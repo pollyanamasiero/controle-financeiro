@@ -1,14 +1,20 @@
 import pandas as pd
-from funcoes.transacoes import carregar_dados
+from funcoes.banco import conectar
 
 def analisar_dados():
-    dados = carregar_dados()
+        
+    conexao = conectar()
     
-    if not dados:
+    df = pd.read_sql_query(
+        "SELECT * FROM transacoes",
+        conexao
+    )
+    
+    conexao.close()
+    
+    if df.empty:
         print("Sem dados para análise.")
         return
-    
-    df = pd.DataFrame(dados)
     
     df["valor"] = pd.to_numeric(df["valor"])
     df["tipo"] = df["tipo"].str.strip().str.lower()

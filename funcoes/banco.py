@@ -20,6 +20,3 @@ def criar_banco():
     
     conexao.commit()
     conexao.close()
-    
-    print("Banco de dados criado com sucesso!")
-    

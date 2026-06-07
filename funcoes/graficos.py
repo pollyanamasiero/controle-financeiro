@@ -1,16 +1,22 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from funcoes.banco import conectar
 
-from funcoes.transacoes import carregar_dados
 
 def grafico_gastos_categoria():
-    dados = carregar_dados()
+    conexao = conectar()
     
-    if not dados:
+    df = pd.read_sql_query(
+        "SELECT * FROM transacoes",
+        conexao
+    )
+
+    conexao.close()
+
+    if df.empty:
         print("Sem dados para gerar gráfico.")
         return
     
-    df = pd.DataFrame(dados)
     df["tipo"] = df["tipo"].str.strip().str.lower()
     
     despesas = df[df["tipo"] == "despesa"]
@@ -31,13 +37,18 @@ def grafico_gastos_categoria():
     plt.show()
     
 def grafico_receitas_despesas():
-    dados = carregar_dados()
+    conexao = conectar()
     
-    if not dados:
+    df = pd.read_sql_query(
+        "SELECT * FROM transacoes",
+        conexao
+    )
+
+    conexao.close()
+
+    if df.empty:
         print("Sem dados para gerar gráfico.")
         return
-    
-    df = pd.DataFrame(dados)
     
     df["tipo"] = df["tipo"].str.strip().str.lower()
     df["valor"] = pd.to_numeric(df["valor"])

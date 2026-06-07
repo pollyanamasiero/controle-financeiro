@@ -1,53 +1,49 @@
-import json
 from datetime import datetime
 from funcoes.banco import conectar
 
-ARQUIVO = "dados.json"
-
-def teste_banco():
+def carregar_transacoes_db():
     conexao = conectar()
-
     cursor = conexao.cursor()
-
+    
     cursor.execute("""
-        INSERT INTO transacoes
-        (tipo, valor, categoria, data)
-        VALUES (?, ?, ?, ?)
-    """, ("receita", 999.99, "Teste", "2026-06-03"))
-
-    conexao.commit()
+        SELECT tipo, valor, categoria, data
+        FROM transacoes
+    """)
+    
+    dados = cursor.fetchall()
+    
     conexao.close()
-
-    print("Registro inserido!")
     
-
-def carregar_dados():
-    try:
-        with open(ARQUIVO, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return []
+    return dados
     
-    
-def salvar_dados(dados):
-    with open(ARQUIVO, "w", encoding="utf-8") as f:
-        json.dump(dados, f, indent=4, ensure_ascii=False)
-        
         
 def ver_saldo():
-    dados = carregar_dados()
+    
+    conexao = conectar()
+    cursor = conexao.cursor()
+    
+    cursor.execute("""
+        SELECT tipo, valor
+        FROM transacoes
+    """)
+    
+    transacoes = cursor.fetchall()
+    
+    conexao.close()
+    
     saldo = 0
     
-    for t in dados:
-        if t["tipo"] == "receita":
-            saldo += float(t["valor"])
+    for tipo, valor in transacoes:
+        if tipo == "receita":
+            saldo += valor
         else:
-            saldo -= float(t["valor"])
+            saldo -= valor
             
-    print(f"Saldo atual: {saldo:.2f}")
+    print(f"Saldo atual: R$ {saldo:.2f}")
+    
     
 def listar_transacoes():
-    dados = carregar_dados()
+    dados = carregar_transacoes_db()
     
     if not dados:
         print("Nenhuma transação encontrada.")
@@ -56,10 +52,10 @@ def listar_transacoes():
     print("\n--- TRANSAÇÕES ---")
     
     for i, t in enumerate(dados, start=1):
-        tipo = t["tipo"].capitalize()
-        valor = f"R$ {float(t['valor']):.2f}"
-        categoria = t["categoria"]
-        data = t["data"]
+        tipo = t[0].capitalize()
+        valor = f"R$ {float(t[1]):.2f}"
+        categoria = t[2]
+        data = t[3]
         
         print(f"{i}. [{tipo}] {valor} | {categoria} | {data}")
         
@@ -88,17 +84,7 @@ def adicionar_transacao():
             
     categoria = input("Categoria: ").strip().title()
     
-    # dados = carregar_dados()
-    
-    # dados.append({
-    #     "tipo": tipo,
-    #     "valor": valor,
-    #     "categoria": categoria,
-    #     "data": data
-    # })
-    
     conexao = conectar()
-    
     cursor = conexao.cursor()
     
     cursor.execute("""
@@ -110,82 +96,118 @@ def adicionar_transacao():
     conexao.commit()
     conexao.close()
     
-    # salvar_dados(dados)
     print("Transação salva!")
     
     
 def remover_transacao():
-    dados = carregar_dados()
+    conexao = conectar()
+    cursor = conexao.cursor()
+    
+    cursor.execute("""
+        SELECT id, tipo, valor, categoria, data
+        FROM transacoes
+    """)
+    
+    dados = cursor.fetchall()
     
     if not dados:
         print("Nenhuma transação encontrada.")
+        conexao.close()
         return
     
     print("\n--- TRANSAÇÕES ---")
     
     for i, t in enumerate(dados, start=1):
-        print(f"{i}. [{t['tipo'].capitalize()}] R$ {float(t['valor']):.2f} | {t['categoria']} | {t['data']}")
+        print(f"{i}. [{t[1].capitalize()}] R$ {float(t[2]):.2f} | {t[3]} | {t[4]}")
         
     try:
         indice = int(input("\nDigite o número da transação que deseja remover: "))
         
         if 1 <= indice <= len(dados):
-            removida = dados.pop(indice - 1)
-            salvar_dados(dados)
+            
+            id_transacao = dados[indice - 1][0]
+            
+            cursor.execute("""
+                DELETE FROM transacoes
+                WHERE id = ?
+            """, (id_transacao,))
+            
+            conexao.commit()
             
             print("\nTransação removida com sucesso!")
-            print(f"Removido: {removida['categoria']} - R$ {float(removida['valor']):.2f}")
-            
+                        
         else:
             print('Número inválido.')
             
     except ValueError:
         print("Digite um número válido")
         
+    conexao.close()
+        
 def editar_transacao():
-    dados = carregar_dados()
-    
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT id, tipo, valor, categoria, data
+        FROM transacoes
+    """)
+
+    dados = cursor.fetchall()
+
     if not dados:
         print("Nenhuma transação encontrada")
+        conexao.close()
         return
-    
-    print('\n--- TRANSAÇÕES ---')
-    
+
+    print("\n--- TRANSAÇÕES ---")
+
     for i, t in enumerate(dados, start=1):
-        print(f"{i}. [{t['tipo'].capitalize()}] R$ {float(t['valor']):.2f} | {t['categoria']} | {t['data']}")
-        
+        print(
+            f"{i}. [{t[1].capitalize()}] "
+            f"R$ {float(t[2]):.2f} | "
+            f"{t[3]} | {t[4]}"
+        )
+
     try:
         indice = int(input("\nDigite o número da transação que deseja editar: "))
-        
+
         if 1 <= indice <= len(dados):
-            
-            transacao = dados[indice -1]
-            
+
+            transacao = dados[indice - 1]
+
+            id_transacao = transacao[0]
+
             print("\nDeixe vazio para manter o valor atual.")
-            
-            novo_tipo = input(f"Tipo ({transacao['tipo']}): ").lower()
-            novo_valor = input(f"Valor ({transacao['valor']}): ")
-            nova_categoria = input(f"Categoria ({transacao['categoria']}): ").title()
-            nova_data = input(f"Data ({transacao['data']}): ")
-            
-            if novo_tipo:
-                transacao['tipo'] = novo_tipo
-                
-            if novo_valor:
-                transacao['valor'] = float(novo_valor)
-                
-            if nova_categoria:
-                transacao['categoria'] = nova_categoria
-                
-            if nova_data:
-                transacao['data'] = nova_data
-                
-            salvar_dados(dados)
-            
-            print('\nTransação atualizada com sucesso!')
-            
+
+            novo_tipo = input(f"Tipo ({transacao[1]}): ").lower()
+            novo_valor = input(f"Valor ({transacao[2]}): ")
+            nova_categoria = input(f"Categoria ({transacao[3]}): ").title()
+            nova_data = input(f"Data ({transacao[4]}): ")
+
+            tipo = novo_tipo if novo_tipo else transacao[1]
+            valor = float(novo_valor) if novo_valor else transacao[2]
+            categoria = nova_categoria if nova_categoria else transacao[3]
+            data = nova_data if nova_data else transacao[4]
+
+            cursor.execute("""
+                UPDATE transacoes
+                SET tipo = ?,
+                    valor = ?,
+                    categoria = ?,
+                    data = ?
+                WHERE id = ?
+            """, (tipo, valor, categoria, data, id_transacao))
+
+            conexao.commit()
+
+            print("\nTransação atualizada com sucesso!")
+
         else:
-            print('Número inválido.')
-            
+            print("Número inválido.")
+
     except ValueError:
         print("Digite um número válido.")
+
+    conexao.close()
+        

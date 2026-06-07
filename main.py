@@ -47,5 +47,4 @@ def menu():
             print("Opção inválida!")
             
 criar_banco()      
-# teste_banco()
 menu()
