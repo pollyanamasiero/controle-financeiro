@@ -1,9 +1,8 @@
 from funcoes.analise import analisar_dados
-from funcoes.transacoes import ver_saldo, listar_transacoes, adicionar_transacao, remover_transacao, editar_transacao
+from funcoes.transacoes import ver_saldo, listar_transacoes, adicionar_transacao, remover_transacao, editar_transacao, filtrar_transacoes, resumo_mensal, resumo_anual
 from funcoes.graficos import grafico_gastos_categoria, grafico_receitas_despesas
 from funcoes.exportacao import exportar_excel
 from funcoes.banco import criar_banco
-# from funcoes.transacoes import teste_banco
 
      
 def menu():
@@ -18,7 +17,10 @@ def menu():
         print("7 - Gráfico receitas vs despesas")
         print("8 - Remover transação")
         print("9 - Editar transação")
-        print("10 - Sair")
+        print("10 - Filtrar transações por mês/ano")
+        print("11 - Resumo mensal")
+        print("12 - Relatório anual")
+        print("13 - Sair")
         
         opcao = input("Escolha: ")
         
@@ -41,6 +43,12 @@ def menu():
         elif opcao == "9":
             editar_transacao()
         elif opcao == "10":
+            filtrar_transacoes()
+        elif opcao == "11":
+            resumo_mensal()
+        elif opcao == "12":
+            resumo_anual()
+        elif opcao == "13":
             print("Saindo...")
             break
         else:

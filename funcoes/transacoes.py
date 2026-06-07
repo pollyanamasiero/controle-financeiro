@@ -211,3 +211,143 @@ def editar_transacao():
 
     conexao.close()
         
+def filtrar_transacoes():
+    ano = input("Ano (YYYY): ").strip()
+    mes = input("Mês (01-12) ou Enter para todo o ano: ").strip()
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    if ano and mes:
+        cursor.execute("""
+            SELECT tipo, valor, categoria, data
+            FROM transacoes
+            WHERE strftime('%Y', data) = ?
+            AND strftime('%m', data) = ?
+        """, (ano, mes))
+
+        titulo = f"TRANSAÇÕES {mes}/{ano}"
+
+    elif ano:
+        cursor.execute("""
+            SELECT tipo, valor, categoria, data
+            FROM transacoes
+            WHERE strftime('%Y', data) = ?
+        """, (ano,))
+
+        titulo = f"TRANSAÇÕES DE {ano}"
+
+    else:
+        print("Informe pelo menos o ano.")
+        conexao.close()
+        return
+
+    resultados = cursor.fetchall()
+
+    conexao.close()
+
+    if not resultados:
+        print("Nenhuma transação encontrada para este período.")
+        return
+
+    print(f"\n--- {titulo} ---")
+
+    for t in resultados:
+        print(
+            f"[{t[0].capitalize()}] "
+            f"R$ {float(t[1]):.2f} | "
+            f"{t[2]} | "
+            f"{t[3]}"
+        )
+        
+def resumo_mensal():
+    ano = input("Ano (YYYY): ").strip()
+    mes = input("Mês (01-12): ").strip()
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT tipo, valor
+        FROM transacoes
+        WHERE strftime('%Y', data) = ?
+        AND strftime('%m', data) = ?
+    """, (ano, mes))
+
+    transacoes = cursor.fetchall()
+
+    conexao.close()
+
+    if not transacoes:
+        print("Nenhuma transação encontrada para este período.")
+        return
+
+    receitas = 0
+    despesas = 0
+
+    for tipo, valor in transacoes:
+        if tipo == "receita":
+            receitas += valor
+        else:
+            despesas += valor
+
+    saldo = receitas - despesas
+
+    print(f"\n--- RESUMO {mes}/{ano} ---")
+    print(f"Receitas: R$ {receitas:.2f}")
+    print(f"Despesas: R$ {despesas:.2f}")
+    print(f"Saldo: R$ {saldo:.2f}")
+    
+def resumo_anual():
+    conexao = conectar()
+    cursor = conexao.cursor()
+    
+    ano = input("Ano (YYYY): ")
+    
+    print(f"\n--- RESUMO ANUAL {ano} ---")
+    
+    for mes in range(1, 13):
+        
+        mes_formatado = f"{mes:02d}"
+
+        cursor.execute("""
+            SELECT tipo, valor
+            FROM transacoes
+            WHERE strftime('%Y', data) = ?
+            AND strftime('%m', data) = ?
+        """, (ano, mes_formatado))
+
+        transacoes = cursor.fetchall()
+
+        receitas = 0
+        despesas = 0
+
+        for tipo, valor in transacoes:
+            if tipo == "receita":
+                receitas += valor
+            else:
+                despesas += valor
+
+        saldo = receitas - despesas
+        
+        meses = {
+        "01": "Janeiro",
+        "02": "Fevereiro",
+        "03": "Março",
+        "04": "Abril",
+        "05": "Maio",
+        "06": "Junho",
+        "07": "Julho",
+        "08": "Agosto",
+        "09": "Setembro",
+        "10": "Outubro",
+        "11": "Novembro",
+        "12": "Dezembro"
+        }
+
+        print(f"\n--- {meses[mes_formatado]} ---")
+        print(f"Receitas: R$ {receitas:.2f}")
+        print(f"Despesas: R$ {despesas:.2f}")
+        print(f"Saldo: R$ {saldo:.2f}")
+
+    conexao.close()
