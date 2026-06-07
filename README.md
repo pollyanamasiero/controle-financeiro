@@ -18,11 +18,13 @@ Projeto desenvolvido em Python para auxiliar no controle de finanças pessoais a
 ## Tecnologias Utilizadas
 
 * Python
+* SQLite
 * Pandas
 * Matplotlib
 * OpenPyXL
 * Power BI
-* Git e GitHub
+* Git
+* GitHub
 
 ## Estrutura do Projeto
 
