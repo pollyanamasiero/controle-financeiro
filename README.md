@@ -14,6 +14,9 @@ Projeto desenvolvido em Python para auxiliar no controle de finanças pessoais a
 * Gráfico de gastos por categoria
 * Gráfico de receitas vs despesas
 * Dashboard interativo no Power BI
+* Filtro de transações por mês e ano
+* Resumo mensal
+* Relatório anual
 
 ## Tecnologias Utilizadas
 
@@ -34,11 +37,11 @@ controle_financeiro/
 ├── funcoes/
 │   ├── __init__.py
 │   ├── analise.py
+│   ├── banco.py
 │   ├── exportacao.py
 │   ├── graficos.py
 │   └── transacoes.py
 │
-├── dados.json
 ├── main.py
 ├── README.md
 └── .gitignore
@@ -72,7 +75,7 @@ python main.py
 
 ## Dashboard
 
-O projeto também possui integração com Power BI para visualização dos dados financeiros por meio de dashboards interativos.
+O projeto conta com um dashboard desenvolvido no Power BI para análise visual das informações financeiras.
 
 ![Dashboard](imagens/dashboard.png)
 
@@ -82,21 +85,22 @@ Durante o desenvolvimento deste projeto foram praticados conceitos como:
 
 * Estruturas de repetição e condicionais
 * Funções
-* Manipulação de arquivos JSON
 * Modularização de código
 * Tratamento de exceções
 * Análise de dados com Pandas
 * Geração de gráficos com Matplotlib
 * Versionamento com Git e GitHub
 * Criação de dashboards no Power BI
+* Banco de dados SQLite
+* Consultas SQL
 
 ## Melhorias Futuras
 
-* Filtros por período
-* Relatórios mensais
-* Banco de dados SQLite
-* Interface gráfica
+* Interface web com Flask
 * Dashboard web
+* Autenticação de usuários
+* Filtros avançados por categoria
+* Deploy na nuvem
 
 ---
 
